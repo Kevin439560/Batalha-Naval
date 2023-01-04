@@ -2,6 +2,7 @@
 #include<string>
 #include<stdlib.h>
 #include<time.h>
+#include<limits>
 #define TAM 10
 
 using namespace std;
@@ -84,7 +85,7 @@ void menu_inicial(){
 
             default:
 
-                cout << "Escolha Inválida";
+                cout << "Escolha Invalida";
 
                 exit(EXIT_FAILURE);
                 break;
@@ -257,7 +258,7 @@ void por_barcos(char tabuleiro[TAM][TAM]){
 }
 
 void ver_tiro(char tabuleiro[TAM][TAM], int linha, int coluna, int * pontos, string * mensagem){
-
+ 
         switch(tabuleiro[linha][coluna]){
 
             case 'P':
@@ -292,7 +293,9 @@ void jogo(string nome){
 
     int opcao, linha, coluna, pontos = 0, tent_feitas = 0, tent_totais = 10;
 
-    string mensagem = "\nJogo iniciado!!\n\n";
+    cout << "\nJogo iniciado!!\n\n";
+    
+    string mensagem = "";
 
     inicia_tabu(tabuleiro, tabu_mask);
 
@@ -308,23 +311,39 @@ void jogo(string nome){
 
         linha = coluna = -1;
 
-        while((linha < 0 || linha > 9) || (coluna < 0 || coluna > 9)){
-
+        while((linha < 0 || linha > TAM - 1) || (coluna < 0 || coluna > TAM - 1)){
+            
             cout << "\nPontos: " << pontos;
 
             cout << "\nTentativas Restantes: " << tent_totais - tent_feitas;
         
             cout << "\n\n" << nome << ", digite uma linha:\n";
 
-            cin >> linha;
+            cin >> linha; 
+
+            while (cin.fail()) { 
+                
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    
+                cout << "Por favor, digite um numero valido (linha) :\n";
+                cin >> linha; 
+            }
 
             cout << "Agora digite uma coluna:\n";
 
             cin >> coluna;
 
+            while(cin.fail()) { 
+                
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    
+                cout << "Por favor, digite um numero valido (coluna) :\n";
+                cin >> coluna; 
+            }
+
         }
-
-
 
         ver_tiro(tabuleiro, linha, coluna, &pontos, &mensagem);
 
